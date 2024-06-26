@@ -8,7 +8,7 @@ sudo apt-get install -y nodejs
 sudo npm install -g pm2
 
 # Navigate to the application directory
-cd /home/ubuntu/your-app-directory
+cd /home/ubuntu/node-starter
 
 # Stop the existing application
 pm2 stop my-app || true
