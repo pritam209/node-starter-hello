@@ -36,7 +36,7 @@ pipeline {
                 sshagent(credentials: [env.SSH_CREDENTIALS_ID]) {
                     sh '''
                     # Copy build artifacts to remote EC2
-                    scp -o StrictHostKeyChecking=no -r dist/ ${REMOTE_HOST}:/home/ubuntu/your-app-directory/
+                    scp -o StrictHostKeyChecking=no -r dist/ ${REMOTE_HOST}:/home/ubuntu/node-starter/
 
                     # Copy deployment script to remote EC2
                     scp -o StrictHostKeyChecking=no deploy.sh ${REMOTE_HOST}:/home/ubuntu/
