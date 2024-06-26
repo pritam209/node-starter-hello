@@ -42,13 +42,12 @@ pipeline {
                     ssh -o StrictHostKeyChecking=no ${REMOTE_HOST} << EOF
                     # Ensure NVM is sourced and Node.js is available
                     export NVM_DIR="$HOME/.nvm"
-                    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-                    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-                    
-                    . "$NVM_DIR/nvm.sh"  # This loads nvm
+                    source "$NVM_DIR/nvm.sh"
+                    source "$NVM_DIR/bash_completion"
+
                     nvm install node
                     nvm use node
-                    node -v 
+                    node -v
                     sudo npm install -g pm2
                     cd /home/ubuntu/
                     pm2 stop my-app || true
@@ -64,14 +63,4 @@ pipeline {
 
     post {
         success {
-            mail to: 'robinhooda66@gmail.com,xdankitjain@gmail.com,pallavisnaikdigital@gmail.com',
-                 subject: "Build Success: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
-                 body: "The build ${env.JOB_NAME} ${env.BUILD_NUMBER} was successful."
-        }
-        failure {
-            mail to: 'robinhooda66@gmail.com',
-                 subject: "Build Failure: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
-                 body: "The build ${env.JOB_NAME} ${env.BUILD_NUMBER} failed."
-        }
-    }
-}
+            mail to: 'robinhooda66@gmail.com,xdankitjain@gmail.com,pallavisna
