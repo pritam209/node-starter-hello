@@ -31,34 +31,19 @@ pipeline {
                 sh 'npm run build'
             }
         }
-        // stage('Deploy') {
-        //     steps {
-        //         sh '''
-
-        //         # Stop the existing application
-        //         pm2 stop my-app || true
-
-        //         # Start the new application
-        //         pm2 start dist/main.js --name my-app
-
-        //         # Save the pm2 process list and corresponding environments
-        //         pm2 save
-        //         '''
-        //     }
-        // }
-         stage('Deploy to Remote EC2') {
+        stage('Deploy to Remote EC2') {
             steps {
                 sshagent(credentials: [env.SSH_CREDENTIALS_ID]) {
-                    sh """
+                    sh '''
                     # Copy build artifacts to remote EC2
-                    scp -o StrictHostKeyChecking=no -r dist/ ${env.REMOTE_HOST}:/home/ubuntu/
+                    scp -o StrictHostKeyChecking=no -r dist/ ${REMOTE_HOST}:/home/ubuntu/
 
                     # Run deployment commands on remote EC2
-                    ssh -o StrictHostKeyChecking=no ${env.REMOTE_HOST} << EOF
+                    ssh -o StrictHostKeyChecking=no ${REMOTE_HOST} << EOF
                     # Ensure NVM is sourced and Node.js is available
-                    export NVM_DIR="\$HOME/.nvm"
-                    [ -s "\$NVM_DIR/nvm.sh" ] && \. "\$NVM_DIR/nvm.sh"
-                    [ -s "\$NVM_DIR/bash_completion" ] && \. "\$NVM_DIR/bash_completion"
+                    export NVM_DIR="$HOME/.nvm"
+                    [ -s "$NVM_DIR/nvm.sh" ] && \\. "$NVM_DIR/nvm.sh"
+                    [ -s "$NVM_DIR/bash_completion" ] && \\. "$NVM_DIR/bash_completion"
                     
                     nvm install node
                     nvm use node
@@ -70,13 +55,13 @@ pipeline {
                     pm2 save
                     exit
                     EOF
-                    """
+                    '''
                 }
             }
-            }
+        }
     }
 
-   post {
+    post {
         success {
             mail to: 'robinhooda66@gmail.com,xdankitjain@gmail.com,pallavisnaikdigital@gmail.com',
                  subject: "Build Success: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
