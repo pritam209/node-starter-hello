@@ -36,23 +36,15 @@ pipeline {
                 sshagent(credentials: [env.SSH_CREDENTIALS_ID]) {
                     sh '''
                     # Copy build artifacts to remote EC2
-                    scp -o StrictHostKeyChecking=no -r dist/ ${REMOTE_HOST}:/home/ubuntu/
+                    scp -o StrictHostKeyChecking=no -r dist/ ${REMOTE_HOST}:/home/ubuntu/your-app-directory/
 
-                    # Run deployment commands on remote EC2
+                    # Copy deployment script to remote EC2
+                    scp -o StrictHostKeyChecking=no deploy.sh ${REMOTE_HOST}:/home/ubuntu/
+
+                    # Run deployment script on remote EC2
                     ssh -o StrictHostKeyChecking=no ${REMOTE_HOST} << EOF
-                    # Ensure NVM is sourced and Node.js is available
-                    export NVM_DIR="$HOME/.nvm"
-                    source "$NVM_DIR/nvm.sh"
-                    source "$NVM_DIR/bash_completion"
-
-                    nvm install node
-                    nvm use node
-                    node -v
-                    sudo npm install -g pm2
-                    cd /home/ubuntu/
-                    pm2 stop my-app || true
-                    pm2 start dist/main.js --name my-app
-                    pm2 save
+                    chmod +x /home/ubuntu/deploy.sh
+                    /home/ubuntu/deploy.sh
                     exit
                     EOF
                     '''
