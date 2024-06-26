@@ -57,6 +57,8 @@ pipeline {
                     ssh -o StrictHostKeyChecking=no ${env.REMOTE_HOST} << EOF
                     pwd
                     whoami
+                    export NVM_DIR="$HOME/.nvm"
+                    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" 
                     node -v 
                     sudo npm install -g pm2
                     cd /home/ubuntu/
