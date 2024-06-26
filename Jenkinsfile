@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-               sh 'git pull origin main'
+                git branch: 'main', url: 'https://github.com/NikhilChowdhury27/node-starter.git'
             }
         }
         stage('Install Dependencies') {
@@ -42,9 +42,10 @@ pipeline {
                     ssh -o StrictHostKeyChecking=no ${REMOTE_HOST} << EOF
                     # Ensure NVM is sourced and Node.js is available
                     export NVM_DIR="$HOME/.nvm"
-                    [ -s "$NVM_DIR/nvm.sh" ] && \\. "$NVM_DIR/nvm.sh"
-                    [ -s "$NVM_DIR/bash_completion" ] && \\. "$NVM_DIR/bash_completion"
+                    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
                     
+                    . "$NVM_DIR/nvm.sh"  # This loads nvm
                     nvm install node
                     nvm use node
                     node -v 
