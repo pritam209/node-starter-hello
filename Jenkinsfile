@@ -55,6 +55,10 @@ pipeline {
 
                     # Run deployment commands on remote EC2
                     ssh -o StrictHostKeyChecking=no ${env.REMOTE_HOST} << EOF
+                    pwd
+                    whoami
+                    node -v 
+                    sudo npm install -g pm2
                     cd /home/ubuntu/
                     pm2 stop my-app || true
                     pm2 start dist/main.js --name my-app
