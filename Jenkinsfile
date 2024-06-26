@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        REMOTE_HOST = '13.201.95.100'
+        REMOTE_HOST = 'ubuntu@13.201.95.100'
         SSH_CREDENTIALS_ID = 'jenkins_slave'  // Update with the credentials ID from Jenkins
     }
 
