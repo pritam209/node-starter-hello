@@ -55,10 +55,13 @@ pipeline {
 
                     # Run deployment commands on remote EC2
                     ssh -o StrictHostKeyChecking=no ${env.REMOTE_HOST} << EOF
-                    pwd
-                    whoami
-                    export NVM_DIR="$HOME/.nvm"
-                    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" 
+                    # Ensure NVM is sourced and Node.js is available
+                    export NVM_DIR="\$HOME/.nvm"
+                    [ -s "\$NVM_DIR/nvm.sh" ] && \. "\$NVM_DIR/nvm.sh"
+                    [ -s "\$NVM_DIR/bash_completion" ] && \. "\$NVM_DIR/bash_completion"
+                    
+                    nvm install node
+                    nvm use node
                     node -v 
                     sudo npm install -g pm2
                     cd /home/ubuntu/
