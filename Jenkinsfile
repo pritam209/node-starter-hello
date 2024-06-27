@@ -39,17 +39,17 @@ pipeline {
                     scp -o StrictHostKeyChecking=no -r dist/ ${REMOTE_HOST}:/home/ubuntu/
 
                     # Copy deployment script to remote EC2
-                    #scp -o StrictHostKeyChecking=no deploy.sh ${REMOTE_HOST}:/home/ubuntu/
+                    scp -o StrictHostKeyChecking=no deploy.sh ${REMOTE_HOST}:/home/ubuntu/
 
                     # Run deployment script on remote EC2
                     ssh -o StrictHostKeyChecking=no ${REMOTE_HOST} << EOF
-                    #chmod +x /home/ubuntu/deploy.sh
-                    #/home/ubuntu/deploy.sh
+                    chmod +x /home/ubuntu/deploy.sh
+                    /home/ubuntu/deploy.sh
 
-                    cd /home/ubuntu/
-                    pm2 stop my-app || true
-                    pm2 start dist/main.js --name my-app
-                    pm2 save
+                    #cd /home/ubuntu/
+                    #pm2 stop my-app || true
+                    #pm2 start dist/main.js --name my-app
+                    #pm2 save
                     exit
                     EOF
                     '''
