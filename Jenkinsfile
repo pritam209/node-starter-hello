@@ -39,13 +39,17 @@ pipeline {
                     scp -o StrictHostKeyChecking=no -r dist/ ${REMOTE_HOST}:/home/ubuntu/
 
                     # Copy deployment script to remote EC2
-                    scp -o StrictHostKeyChecking=no deploy.sh ${REMOTE_HOST}:/home/ubuntu/
+                    #scp -o StrictHostKeyChecking=no deploy.sh ${REMOTE_HOST}:/home/ubuntu/
 
                     # Run deployment script on remote EC2
-                    ssh -o StrictHostKeyChecking=no ${REMOTE_HOST} << EOF
-                    chmod +x /home/ubuntu/deploy.sh
-                    /home/ubuntu/deploy.sh
+                    #ssh -o StrictHostKeyChecking=no ${REMOTE_HOST} << EOF
+                    #chmod +x /home/ubuntu/deploy.sh
+                    #/home/ubuntu/deploy.sh
 
+                    cd /home/ubuntu/
+                    pm2 stop my-app || true
+                    pm2 start dist/main.js --name my-app
+                    pm2 save
                     exit
                     EOF
                     '''
@@ -56,40 +60,14 @@ pipeline {
 
     post {
         success {
-            emailext(
-                to: 'nikhilchowdhury666@gmail.com',
-                subject: "Build Success: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
-                body: """
-                <html>
-                <body>
-                    <h2>Build Success</h2>
-                    <p>The build <strong>${env.JOB_NAME} ${env.BUILD_NUMBER}</strong> was successful.</p>
-                    <p><a href="${env.BUILD_URL}">View Build Details</a></p>
-                    <p>Thank you,</p>
-                    <p>Jenkins CI</p>
-                </body>
-                </html>
-                """,
-                mimeType: 'text/html'
-            )
+            mail to: 'nikhilchowdhury666@gmail.com',
+                 subject: "Build Success: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
+                 body: "The build ${env.JOB_NAME} ${env.BUILD_NUMBER} was successful."
         }
         failure {
-            emailext(
-                to: 'nikhilchowdhury666@gmail.com',
-                subject: "Build Failure: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
-                body: """
-                <html>
-                <body>
-                    <h2>Build Failure</h2>
-                    <p>The build <strong>${env.JOB_NAME} ${env.BUILD_NUMBER}</strong> failed.</p>
-                    <p><a href="${env.BUILD_URL}">View Build Details</a></p>
-                    <p>Thank you,</p>
-                    <p>Jenkins CI</p>
-                </body>
-                </html>
-                """,
-                mimeType: 'text/html'
-            )
+            mail to: 'nikhilchowdhury666@gmail.com',
+                 subject: "Build Failure: ${env.JOB_NAME} ${env.BUILD_NUMBER}",
+                 body: "The build ${env.JOB_NAME} ${env.BUILD_NUMBER} failed."
         }
     }
 }
