@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        REMOTE_HOST = 'ubuntu@13.201.95.100'
+        REMOTE_HOST = 'ubuntu@35.154.199.120'
         SSH_CREDENTIALS_ID = 'jenkins_slave'  // Update with the credentials ID from Jenkins
     }
 
@@ -39,7 +39,7 @@ pipeline {
                     scp -o StrictHostKeyChecking=no -r dist/ ${REMOTE_HOST}:/home/ubuntu/
 
                     # Copy deployment script to remote EC2
-                    scp -o StrictHostKeyChecking=no deploy.sh ${REMOTE_HOST}:/home/ubuntu/
+                    #scp -o StrictHostKeyChecking=no deploy.sh ${REMOTE_HOST}:/home/ubuntu/
 
                     # Run deployment script on remote EC2
                     ssh -o StrictHostKeyChecking=no ${REMOTE_HOST} << EOF
