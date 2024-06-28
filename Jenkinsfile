@@ -46,6 +46,7 @@ pipeline {
                     #chmod +x /home/ubuntu/deploy.sh
                     #/home/ubuntu/deploy.sh
 
+                    pwd
                     cd /home/ubuntu/
                     pm2 stop my-app || true
                     pm2 start dist/main.js --name my-app
