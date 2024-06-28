@@ -42,7 +42,7 @@ pipeline {
                     #scp -o StrictHostKeyChecking=no deploy.sh ${REMOTE_HOST}:/home/ubuntu/
 
                     # Run deployment script on remote EC2
-                    #ssh -o StrictHostKeyChecking=no ${REMOTE_HOST} << EOF
+                    ssh -o StrictHostKeyChecking=no ${REMOTE_HOST} << EOF
                     #chmod +x /home/ubuntu/deploy.sh
                     #/home/ubuntu/deploy.sh
 
