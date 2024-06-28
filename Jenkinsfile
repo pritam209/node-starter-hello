@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         REMOTE_HOST = 'ubuntu@13.233.73.53'
-        SSH_CREDENTIALS_ID = 'jenkins_slave'  // Update with the credentials ID from Jenkins
+        SSH_CREDENTIALS_ID = 'target-instance'  // Update with the credentials ID from Jenkins
     }
 
     stages {
